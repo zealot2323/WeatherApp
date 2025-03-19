@@ -12,6 +12,10 @@ Search takes value, clears it, then:
 */
 const apiKey = "GJTYW2ZM4WRCWAHGFLSBEA6DR";
 
+async function loadImage(name) {
+    const image = await import(`./icons/${name}.png`);
+    return image.default;
+}
 
 async function getWeather(city) {
     const unit = "us";
@@ -37,13 +41,19 @@ function renderWeatherData(data) {
     console.log(data);
     let temp = data.currentConditions.temp;
     let conditions = data.currentConditions.conditions;
+
+    document.querySelector("#temp").textContent = temp;
+    document.querySelector("#cond").textContent = conditions;
+
     let icon = data.currentConditions.icon;
+    loadImage(icon).then((img) => {
+        let iconDiv = document.querySelector("#icon");
+        iconDiv.innerHTML = "";
+        let newIcon = document.createElement("img");
+        newIcon.setAttribute("src", img);
+        iconDiv.appendChild(newIcon);
+      });
 
-    console.log(temp);
-    console.log(conditions);
-    console.log(icon);
-
-    
 }
 
 export default getWeather;
